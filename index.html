@@ -1,90 +1,98 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Winter AR World</title>
-    <meta name="description" content="Winter-themed WebAR with A-Frame">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Winter AR Scene</title>
+<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
+  .overlay {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20,20,20,0.7);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    z-index: 5;
+    font-size: 14px;
+  }
+</style>
+</head>
 
-    <script>
-      let placeSnowman = true;
+<body>
+  <div class="overlay">Tap on the ground to place a winter object ❄️</div>
 
-      AFRAME.registerComponent('tap-to-place', {
-        init() {
-          this.el.sceneEl.addEventListener('click', (evt) => {
-            const hit = evt.detail.intersection;
-            if (!hit) return;
+  <a-scene
+    webxr="requiredFeatures: hit-test"
+    vr-mode-ui="enabled: false"
+    renderer="colorManagement: true; exposure: 1.0"
+    embedded>
 
-            const position = hit.point;
-            const scene = this.el.sceneEl;
+    <a-camera></a-camera>
 
-            let entity;
-            if (placeSnowman) {
-              entity = document.createElement('a-entity');
-              entity.setAttribute('snowman', '');
-            } else {
-              entity = document.createElement('a-entity');
-              entity.setAttribute('pine-tree', '');
-            }
+    <!-- Desktop preview surface -->
+    <a-plane rotation="-90 0 0"
+             width="15"
+             height="15"
+             color="#9bd18b"
+             position="0 0 0">
+    </a-plane>
 
-            entity.setAttribute(
-              'position',
-              `${position.x} ${position.y} ${position.z}`
-            );
+    <!-- Container for placed objects -->
+    <a-entity id="world-objects"></a-entity>
 
-            scene.appendChild(entity);
-            placeSnowman = !placeSnowman;
-          });
-        }
-      });
+    <!-- Snowman template -->
+    <a-entity id="snowman-template" visible="false">
+      <a-sphere radius="0.22" position="0 0.22 0" color="#ffffff"></a-sphere>
+      <a-sphere radius="0.16" position="0 0.55 0" color="#ffffff"></a-sphere>
+      <a-sphere radius="0.11" position="0 0.82 0" color="#ffffff"></a-sphere>
+    </a-entity>
 
-      AFRAME.registerComponent('snowman', {
-        init() {
-          this.el.innerHTML = `
-            <a-sphere position="0 0.3 0" radius="0.3" color="#FFFFFF"></a-sphere>
-            <a-sphere position="0 0.75 0" radius="0.22" color="#FFFFFF"></a-sphere>
-            <a-sphere position="0 1.1 0" radius="0.15" color="#FFFFFF"></a-sphere>
+    <!-- Pine tree template -->
+    <a-entity id="tree-template" visible="false">
+      <a-cylinder radius="0.04" height="0.20" position="0 0.10 0" color="#6b4423"></a-cylinder>
+      <a-cone radius-bottom="0.30" height="0.35" position="0 0.35 0" color="#1a7f37"></a-cone>
+      <a-cone radius-bottom="0.22" height="0.28" position="0 0.55 0" color="#239b45"></a-cone>
+    </a-entity>
 
-            <a-cone position="0 1.1 0.15" radius-bottom="0.03" height="0.2" color="#FF8C00" rotation="90 0 0"></a-cone>
+  </a-scene>
 
-            <a-sphere position="-0.05 1.15 0.13" radius="0.02" color="#000"></a-sphere>
-            <a-sphere position="0.05 1.15 0.13" radius="0.02" color="#000"></a-sphere>
-          `;
-        }
-      });
+  <script>
+    const sceneEl = document.querySelector('a-scene');
+    const world = document.getElementById('world-objects');
 
-      AFRAME.registerComponent('pine-tree', {
-        init() {
-          this.el.innerHTML = `
-            <a-cylinder position="0 0.25 0" radius="0.05" height="0.5" color="#8B4513"></a-cylinder>
+    let placeSnowmanNext = true;
 
-            <a-cone position="0 0.7 0" radius-bottom="0.4" height="0.6" color="#0B6623"></a-cone>
-            <a-cone position="0 1.0 0" radius-bottom="0.3" height="0.6" color="#0E7A33"></a-cone>
-            <a-cone position="0 1.3 0" radius-bottom="0.2" height="0.6" color="#118C4F"></a-cone>
-          `;
-        }
-      });
-    </script>
-  </head>
+    function placeWinterObject(event) {
+      const templateId = placeSnowmanNext ? 'snowman-template' : 'tree-template';
+      placeSnowmanNext = !placeSnowmanNext;
 
-  <body>
-    <a-scene
-      xr-mode-ui="XRMode: xr"
-      renderer="colorManagement: true; exposure: 1"
-      shadow="type: pcfsoft"
-      ar-hit-test="target: #ground"
-      tap-to-place
-    >
-      <a-camera position="0 1.6 0"></a-camera>
+      const newObject = document.getElementById(templateId).cloneNode(true);
+      newObject.setAttribute('visible', 'true');
 
-      <a-light type="ambient" intensity="0.6"></a-light>
-      <a-light type="directional" position="1 2 1" intensity="0.8"></a-light>
+      const hit = event.detail && event.detail.intersection;
+      if (hit) {
+        const p = hit.point;
+        newObject.setAttribute('position', `${p.x} ${p.y} ${p.z}`);
+      } else {
+        newObject.setAttribute(
+          'position',
+          `${(Math.random() - 0.5) * 6} 0 ${(Math.random() - 0.5) * 6}`
+        );
+      }
 
-      <!-- Ground plane chosen automatically by AR engine -->
-      <a-entity id="ground"></a-entity>
+      world.appendChild(newObject);
+    }
 
-      <a-sky color="#E6F0FF" hide-on-enter-ar></a-sky>
-    </a-scene>
-  </body>
+    sceneEl.addEventListener('pointerdown', placeWinterObject);
+  </script>
+</body>
 </html>
+
 
