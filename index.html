@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Hello, AR World! • A-Frame</title>
-    <meta name="description" content="Hello, AR World! • A-Frame">
+    <title>snowman and trees</title>
+    <meta name="description" content="Winter-themed AR scene with snowmen and trees">
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
     <!-- script src="https://aframe.io/aframe/dist/aframe-master.min.js"></script -->
     <script>
@@ -27,12 +27,52 @@
       shadow="type: pcfsoft"
       xr-mode-ui="XRMode: xr"
     >
-      <a-light type="directional" light="castShadow:true;" position="1 1 1" intensity="1.57" shadow-camera-automatic="#objects"></a-light>
-      <a-camera position="0 0.4 0" wasd-controls="acceleration:10;"></a-camera>
-      <a-entity id="objects" scale="0.2 0.2 0.2" position="0 0 -1" shadow>
-        <a-box position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-sphere position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+
+      <a-light
+        type="directional"
+        position="1 1 1"
+        intensity="1.6"
+        light="castShadow: true">
+      </a-light>
+
+      <a-camera position="0 0.4 0" wasd-controls="acceleration: 10"></a-camera>
+
+      <!-- Main AR content -->
+      <a-entity id="winter-root" scale="0.2 0.2 0.2" position="0 0 -1">
+
+        <!-- Snowman -->
+        <a-entity id="snow-figure">
+          <a-sphere position="0 0.63 -1" radius="0.62" material="color: #cfd2d3"></a-sphere>
+          <a-sphere position="0 1.58 -1" radius="0.50" material="color: #cfd2d3"></a-sphere>
+          <a-sphere position="0 2.32 -1" radius="0.38" material="color: #cfd2d3"></a-sphere>
+
+          <!-- Nose -->
+          <a-cylinder
+            position="-0.02 2.36 -0.66"
+            height="0.30"
+            radius="0.02"
+            material="color: #000000"
+            rotation="80 0 20">
+          </a-cylinder>
+        </a-entity>
+
+        <!-- Pine trees -->
+        <a-entity id="tree-group">
+          <a-entity position="3.2 0 -0.9">
+            <a-cone height="1.8" radius-bottom="0.9" material="color: #008000" position="0 1.0 0"></a-cone>
+            <a-cone height="1.6" radius-bottom="0.7" material="color: #008000" position="0 1.5 0"></a-cone>
+            <a-cone height="1.4" radius-bottom="0.5" material="color: #008000" position="0 2.0 0"></a-cone>
+            <a-cylinder height="0.6" radius="0.18" material="color: #964B00" position="0 -0.3 0"></a-cylinder>
+          </a-entity>
+
+          <a-entity position="-1.4 0 -0.7" rotation="0 15 0">
+            <a-cone height="1.8" radius-bottom="0.9" material="color: #008000" position="0 1.0 0"></a-cone>
+            <a-cone height="1.6" radius-bottom="0.7" material="color: #008000" position="0 1.5 0"></a-cone>
+            <a-cone height="1.4" radius-bottom="0.5" material="color: #008000" position="0 2.0 0"></a-cone>
+            <a-cylinder height="0.6" radius="0.18" material="color: #964B00" position="0 -0.3 0"></a-cylinder>
+          </a-entity>
+        </a-entity>
+
       </a-entity>
       <a-plane follow-shadow="#objects" material="shader:shadow" shadow="cast:false;" rotation="-90 0 0" width="2" height="2"></a-plane>
       <a-sky color="#ECECEC" hide-on-enter-ar></a-sky>
