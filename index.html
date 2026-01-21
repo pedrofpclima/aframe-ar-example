@@ -5,24 +5,27 @@
     <title>snowman and trees</title>
     <meta name="description" content="Winter-themed AR scene with snowmen and trees">
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-    <!-- script src="https://aframe.io/aframe/dist/aframe-master.min.js"></script -->
+
     <script>
-      AFRAME.registerComponent('follow-shadow', {
-        schema: {type: 'selector'},
-        init() {this.el.object3D.renderOrder = -1;},
+      AFRAME.registerComponent('shadow-follower', {
+        schema: { type: 'selector' },
+        init() {
+          this.el.object3D.renderOrder = -1;
+        },
         tick() {
-          if (this.data) {
-            this.el.object3D.position.copy(this.data.object3D.position);
-            this.el.object3D.position.y-=0.001; // stop z-fighting
-          }
+          if (!this.data) return;
+          this.el.object3D.position.copy(this.data.object3D.position);
+          this.el.object3D.position.y -= 0.001; 
+          // we gotta do this to avoid z-fighting
         }
       });
     </script>
   </head>
+
   <body>
     <a-scene
+      ar-hit-test="target: #winter-root"
       reflection="directionalLight: a-light[type=directional]"
-      ar-hit-test="target: #objects;"
       renderer="colorManagement: true; exposure: 1; toneMapping: ACESFilmic"
       shadow="type: pcfsoft"
       xr-mode-ui="XRMode: xr"
@@ -74,8 +77,20 @@
         </a-entity>
 
       </a-entity>
-      <a-plane follow-shadow="#objects" material="shader:shadow" shadow="cast:false;" rotation="-90 0 0" width="2" height="2"></a-plane>
+
+      <!-- Shadow receiver -->
+      <a-plane
+        shadow-follower="#winter-root"
+        material="shader: shadow"
+        shadow="cast: false"
+        rotation="-90 0 0"
+        width="2"
+        height="2">
+      </a-plane>
+
       <a-sky color="#ECECEC" hide-on-enter-ar></a-sky>
     </a-scene>
   </body>
 </html>
+
+
