@@ -7,7 +7,7 @@
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
 
     <script>
-      AFRAME.registerComponent('shadow-follower', {
+      AFRAME.registerComponent('follow-shadow', {
         schema: { type: 'selector' },
         init() {
           this.el.object3D.renderOrder = -1;
@@ -80,7 +80,7 @@
 
       <!-- Shadow receiver -->
       <a-plane
-        shadow-follower="#winter-root"
+        follow-shadow="#winter-root"
         material="shader: shadow"
         shadow="cast: false"
         rotation="-90 0 0"
