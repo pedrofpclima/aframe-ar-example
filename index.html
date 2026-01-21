@@ -15,7 +15,8 @@
         tick() {
           if (!this.data) return;
           this.el.object3D.position.copy(this.data.object3D.position);
-          this.el.object3D.position.y -= 0.001; // avoid z-fighting
+          this.el.object3D.position.y -= 0.001; 
+          // we gotta do this to avoid z-fighting
         }
       });
     </script>
@@ -48,10 +49,6 @@
           <a-sphere position="0 1.58 -1" radius="0.50" material="color: #cfd2d3"></a-sphere>
           <a-sphere position="0 2.32 -1" radius="0.38" material="color: #cfd2d3"></a-sphere>
 
-          <!-- Hat -->
-          <a-cylinder position="0.04 2.60 -0.94" height="0.18" radius="0.25" material="color: #1e1e1e"></a-cylinder>
-          <a-cylinder position="0.04 2.95 -0.94" height="0.45" radius="0.18" material="color: #1e1e1e"></a-cylinder>
-
           <!-- Nose -->
           <a-cylinder
             position="-0.02 2.36 -0.66"
@@ -65,14 +62,14 @@
         <!-- Pine trees -->
         <a-entity id="tree-group">
           <a-entity position="3.2 0 -0.9">
-            <a-cone height="1.8" radius-bottom="0.9" material="color: #237718" position="0 1.0 0"></a-cone>
+            <a-cone height="1.8" radius-bottom="1.5" material="color: #237718" position="0 1.0 0"></a-cone>
             <a-cone height="1.6" radius-bottom="0.7" material="color: #237718" position="0 1.5 0"></a-cone>
             <a-cone height="1.4" radius-bottom="0.5" material="color: #237718" position="0 2.0 0"></a-cone>
             <a-cylinder height="0.6" radius="0.18" material="color: #392324" position="0 0.3 0"></a-cylinder>
           </a-entity>
 
           <a-entity position="-1.4 0 -0.7" rotation="0 15 0">
-            <a-cone height="1.8" radius-bottom="0.9" material="color: #237718" position="0 1.0 0"></a-cone>
+            <a-cone height="1.8" radius-bottom="1.5" material="color: #237718" position="0 1.0 0"></a-cone>
             <a-cone height="1.6" radius-bottom="0.7" material="color: #237718" position="0 1.5 0"></a-cone>
             <a-cone height="1.4" radius-bottom="0.5" material="color: #237718" position="0 2.0 0"></a-cone>
             <a-cylinder height="0.6" radius="0.18" material="color: #392324" position="0 0.3 0"></a-cylinder>
